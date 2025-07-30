@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  token-metadata-service:
+    build: .
+    ports:
+      - "8082:8082"
+    environment:
+      - NODE_ENV=production
+      - PORT=8082
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+    networks:
+      - metrics-network
+
+  grafana-agent:
+    image: grafana/agent:latest
+    volumes:
+      - ./agent.yml:/etc/agent/agent.yml
+    command: ["-config.file=/etc/agent/agent.yml"]
+    environment:
+      - GRAFANA_CLOUD_URL=${GRAFANA_CLOUD_URL}
+      - GRAFANA_CLOUD_USERNAME=${GRAFANA_CLOUD_USERNAME}
+      - GRAFANA_CLOUD_API_KEY=${GRAFANA_CLOUD_API_KEY}
+    networks:
+      - metrics-network
+    depends_on:
+      - token-metadata-service
+
+networks:
+  metrics-network:
+    driver: bridge
