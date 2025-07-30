@@ -1,5 +1,5 @@
 {
-  "name": "ts-node-server-boilerplate",
+  "name": "ts-node-fastify-boilerplate",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
